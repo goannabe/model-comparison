@@ -1,5 +1,7 @@
 import PredictionDetail from "./PredictionDetail";
 
-export default function ResultsSingle({ data, models }) {
-  return <PredictionDetail results={data.results} totalMs={data.total_ms} models={models} />;
+export default function ResultsSingle({ data, models, explainFor }) {
+  return (
+    <PredictionDetail results={data.results} totalMs={data.total_ms} models={models} explainFor={explainFor} />
+  );
 }

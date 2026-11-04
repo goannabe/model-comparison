@@ -1,6 +1,6 @@
 import { FAMILY_LABELS } from "../constants";
 
-export default function ModelSelector({ availableModels, selectedKeys, onChange }) {
+export default function ModelSelector({ availableModels, selectedKeys, onChange, showCosts }) {
   const families = [];
   for (const m of availableModels) {
     if (!families.includes(m.family)) families.push(m.family);
@@ -47,6 +47,11 @@ export default function ModelSelector({ availableModels, selectedKeys, onChange 
                     onChange={() => toggle(m.key)}
                   />
                   {m.label}
+                  {showCosts && m.cost && (
+                    <span className="model-selector-cost">
+                      {m.cost.predict} cr
+                    </span>
+                  )}
                   {!m.loaded && <span className="model-selector-error"> (failed to load)</span>}
                 </label>
               ))}

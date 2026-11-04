@@ -1,0 +1,18 @@
+# Build context for the backend image is the repo root. Keep secrets, local
+# environments and large/private folders out of it (the image downloads its
+# weights from Hugging Face; it never needs these).
+**/.env
+**/.env.*
+**/.venv
+**/venv
+**/venv-*
+**/__pycache__
+**/*.pyc
+**/db.sqlite3
+**/node_modules
+**/.DS_Store
+.git
+data
+models
+submission
+results

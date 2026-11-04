@@ -66,6 +66,8 @@ MODEL_SPECS = [
     #  }},
 ]
 
+_SPEC_BY_KEY = {spec["key"]: spec for spec in MODEL_SPECS}
+
 
 class ModelRegistry:
     """Loads every model spec once and serves predictions from the in-memory
@@ -108,6 +110,7 @@ class ModelRegistry:
         }
 
     def model_list(self):
+        costs = settings.QUOTA_COSTS
         return [
             {
                 "key": spec["key"],
@@ -115,27 +118,31 @@ class ModelRegistry:
                 "label": spec["label"],
                 "loaded": spec["key"] in self.services,
                 "error": self.load_errors.get(spec["key"]),
+                "explainable": spec["family"] in costs["explain"],
+                "cost": {
+                    "predict": costs["predict"][spec["family"]],
+                    "explain": costs["explain"].get(spec["family"]),
+                },
             }
             for spec in MODEL_SPECS
         ]
 
-    def predict_all(self, text):
-        results = {}
-        for key, service in self.services.items():
-            results[key] = service.predict_one(text)
-        return results
+    def family_of(self, key):
+        return _SPEC_BY_KEY[key]["family"]
 
-    def predict_all_batch(self, texts):
-        results = {}
-        for key, service in self.services.items():
-            results[key] = service.predict_batch(texts)
-        return results
+    def is_loaded(self, key):
+        return key in self.services
 
-    def explain_all(self, text):
-        results = {}
-        for key, service in self.services.items():
-            results[key] = service.explain(text)
-        return results
+    # Each method runs ONLY the requested model keys (validated by the caller),
+    # so a visitor pays for - and the server computes - just what they chose.
+    def predict(self, text, keys):
+        return {key: self.services[key].predict_one(text) for key in keys}
+
+    def predict_batch(self, texts, keys):
+        return {key: self.services[key].predict_batch(texts) for key in keys}
+
+    def explain(self, text, keys):
+        return {key: self.services[key].explain(text) for key in keys}
 
 
 registry = ModelRegistry()

@@ -4,53 +4,61 @@
 // Local `npm run dev` (no nginx in front) sets VITE_API_BASE=http://localhost:8000 via .env.
 const API_BASE = import.meta.env.VITE_API_BASE || "";
 
+// DRF validation errors look like {"models": ["..."], "text": ["..."]}; turn
+// them into one readable line instead of raw JSON.
+function errorMessage(data, status) {
+  if (data.error) return data.error;
+  const parts = Object.entries(data).map(([field, msgs]) =>
+    `${field}: ${Array.isArray(msgs) ? msgs.join(" ") : String(msgs)}`
+  );
+  return parts.join(" | ") || `Request failed (${status})`;
+}
+
 async function parseJsonOrThrow(response) {
   const data = await response.json().catch(() => ({}));
   if (!response.ok) {
-    const message = data.error || JSON.stringify(data) || `Request failed (${response.status})`;
-    throw new Error(message);
+    const error = new Error(errorMessage(data, response.status));
+    error.status = response.status;
+    error.quota = data.quota ?? null; // present on 429 (out of credits)
+    throw error;
   }
   return data;
 }
 
-export async function predictText(text) {
-  const response = await fetch(`${API_BASE}/api/predict/`, {
+function postJson(path, body) {
+  return fetch(`${API_BASE}${path}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ text }),
-  });
-  return parseJsonOrThrow(response);
+    body: JSON.stringify(body),
+  }).then(parseJsonOrThrow);
 }
 
-export async function predictExplain(text) {
-  const response = await fetch(`${API_BASE}/api/predict/explain/`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ text }),
-  });
-  return parseJsonOrThrow(response);
+// Only the models passed in are run (and charged) by the backend.
+export function predictText(text, models) {
+  return postJson("/api/predict/", { text, models });
 }
 
-export async function predictWithExplanation(text) {
-  const [prediction, explanation] = await Promise.all([predictText(text), predictExplain(text)]);
-  const results = Object.fromEntries(
-    Object.entries(prediction.results).map(([modelKey, result]) => [
-      modelKey,
-      { ...result, tokens: explanation.results[modelKey]?.tokens ?? [] },
-    ])
-  );
-  return { ...prediction, results };
+// Word-importance explanation for the given models (SVM, LSTM, BERT only).
+export function explainText(text, models) {
+  return postJson("/api/predict/explain/", { text, models });
 }
 
+// Returns { models: [...], limits: { max_text_chars, batch_max_rows } }.
 export async function fetchModels() {
   const response = await fetch(`${API_BASE}/api/models/`);
-  const data = await parseJsonOrThrow(response);
-  return data.models;
+  return parseJsonOrThrow(response);
 }
 
-export async function predictBatch(file) {
+// { enabled: false } locally; otherwise limit/remaining/reset_in_seconds/...
+export async function fetchQuota() {
+  const response = await fetch(`${API_BASE}/api/quota/`);
+  return parseJsonOrThrow(response);
+}
+
+export async function predictBatch(file, models) {
   const formData = new FormData();
   formData.append("file", file);
+  models.forEach((key) => formData.append("models", key));
   const response = await fetch(`${API_BASE}/api/predict/batch/`, {
     method: "POST",
     body: formData,

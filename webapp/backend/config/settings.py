@@ -19,6 +19,21 @@ REPO_ROOT = BASE_DIR.parent.parent
 MODELS_DIR = REPO_ROOT / "models" / "weights"
 ARTIFACTS_DIR = REPO_ROOT / "models" / "data" / "artifacts"
 
+# Optional local env file (webapp/backend/.env, git-ignored and docker-ignored)
+# for values like QUOTA_ADMIN_KEY. Real environment variables always win, so a
+# deployment configures everything through its own env vars instead.
+_ENV_FILE = BASE_DIR / ".env"
+if _ENV_FILE.exists():
+    for _line in _ENV_FILE.read_text().splitlines():
+        _line = _line.strip()
+        if _line and not _line.startswith("#") and "=" in _line:
+            _key, _value = _line.split("=", 1)
+            os.environ.setdefault(_key.strip(), _value.strip().strip('"').strip("'"))
+
+
+def _env_bool(name, default):
+    return os.environ.get(name, str(default)).strip().lower() in ("1", "true", "yes", "on")
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
@@ -152,5 +167,28 @@ CORS_ALLOWED_ORIGINS = [
 _cors_regex = os.environ.get("DJANGO_CORS_ALLOWED_ORIGIN_REGEX", "").strip()
 CORS_ALLOWED_ORIGIN_REGEXES = [_cors_regex] if _cors_regex else []
 
-BATCH_MAX_ROWS = 200
+BATCH_MAX_ROWS = int(os.environ.get("BATCH_MAX_ROWS", "20"))
 BATCH_MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024
+MAX_TEXT_CHARS = int(os.environ.get("MAX_TEXT_CHARS", "2000"))
+
+# --- Usage limits ("credits") -----------------------------------------------
+# Every predict/explain call costs credits per selected model (per text, so a
+# batch costs cost x rows). Two hourly budgets, both resetting at the top of
+# each UTC hour: one per visitor (by IP) and one shared by the whole app - the
+# shared one is the real cost ceiling, since a visitor can change IP.
+# Off by default for local development; the backend image turns it on.
+# Counters live in process memory, which is correct only while exactly one
+# server process runs (gunicorn --workers 1, Cloud Run max-instances 1).
+QUOTA_ENABLED = _env_bool("QUOTA_ENABLED", False)
+QUOTA_PER_CLIENT_PER_HOUR = int(os.environ.get("QUOTA_PER_CLIENT_PER_HOUR", "40"))
+QUOTA_GLOBAL_PER_HOUR = int(os.environ.get("QUOTA_GLOBAL_PER_HOUR", "400"))
+# Secret for POST /api/quota/reset. Empty = reset endpoint disabled.
+QUOTA_ADMIN_KEY = os.environ.get("QUOTA_ADMIN_KEY", "")
+
+# Credits per text, by model family. A family missing from "explain" has no
+# explanation endpoint (zero-shot's occlusion method reruns BART once per word,
+# so it is disabled for now).
+QUOTA_COSTS = {
+    "predict": {"svm": 1, "lstm": 1, "bert": 2, "zeroshot": 4},
+    "explain": {"svm": 1, "lstm": 2, "bert": 4},
+}

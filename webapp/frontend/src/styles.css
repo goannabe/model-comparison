@@ -548,3 +548,91 @@ header h1 {
   font-size: 0.85rem;
   color: var(--text);
 }
+
+/* --- Credits / usage limits ------------------------------------------- */
+
+.header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.quota-badge {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: 999px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.quota-badge strong {
+  color: var(--ok-text);
+}
+
+.quota-badge.quota-low strong {
+  color: var(--warn-text);
+}
+
+.quota-badge.quota-empty {
+  border-color: #5c2b2b;
+}
+
+.quota-badge.quota-empty strong,
+.quota-shared {
+  color: var(--error-text);
+}
+
+.quota-sep {
+  color: var(--text-faint);
+}
+
+.cost-note strong {
+  color: var(--text);
+}
+
+.cost-blocked {
+  color: var(--warn-text);
+}
+
+.model-selector-cost {
+  margin-left: 0.35rem;
+  font-size: 0.75rem;
+  color: var(--text-faint);
+}
+
+.explain-button {
+  margin-top: 0.9rem;
+  padding: 0.4rem 0.9rem;
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+
+.explain-button:hover:not(:disabled) {
+  background: var(--accent);
+  color: #fff;
+}
+
+.explain-button:disabled {
+  border-color: var(--border);
+  color: var(--text-faint);
+  cursor: not-allowed;
+}
+
+.explain-unavailable {
+  margin: 0.9rem 0 0;
+  font-size: 0.75rem;
+  color: var(--text-faint);
+}

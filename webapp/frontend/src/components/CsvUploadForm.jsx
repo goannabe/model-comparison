@@ -1,10 +1,14 @@
 import { useRef, useState } from "react";
+import CostNote from "./CostNote";
+import { runCost } from "../credits";
 
-export default function CsvUploadForm({ onSubmit, loading }) {
+export default function CsvUploadForm({ onSubmit, loading, costPerText, credits, noModels, maxRows }) {
   const [file, setFile] = useState(null);
   const [rowCount, setRowCount] = useState(null);
   const [dragging, setDragging] = useState(false);
   const inputRef = useRef(null);
+  const tooMany = maxRows && rowCount > maxRows;
+  const cantAfford = credits !== null && rowCount !== null && runCost(costPerText, rowCount) > credits;
 
   async function selectFile(nextFile) {
     if (!nextFile) {
@@ -32,7 +36,7 @@ export default function CsvUploadForm({ onSubmit, loading }) {
 
   return (
     <form className="input-form" onSubmit={handleSubmit}>
-      <p className="hint">CSV must have a "text" column (max 200 rows, 5MB).</p>
+      <p className="hint">CSV must have a "text" column (max {maxRows ?? 200} rows, 5MB).</p>
       <div
         className={`dropzone ${dragging ? "dragging" : ""}`}
         onDragOver={(e) => {
@@ -75,11 +79,14 @@ export default function CsvUploadForm({ onSubmit, loading }) {
         />
       </div>
       {file && (
-        <p className="hint">
+        <p className={`hint ${tooMany ? "cost-blocked" : ""}`}>
           Selected: {file.name} ({rowCount} row{rowCount === 1 ? "" : "s"} detected)
         </p>
       )}
-      <button type="submit" disabled={loading || !file}>
+      {file && rowCount > 0 && (
+        <CostNote costPerText={costPerText} count={rowCount} credits={credits} noModels={noModels} />
+      )}
+      <button type="submit" disabled={loading || !file || tooMany || noModels || cantAfford}>
         {loading ? "Processing..." : "Run batch prediction"}
       </button>
     </form>

@@ -5,6 +5,11 @@ services:
       dockerfile: webapp/Dockerfile.backend
     ports:
       - "8000:8000"
+    # Local secrets such as QUOTA_ADMIN_KEY, read at run time (never baked
+    # into the image). Optional, so the stack still starts without it.
+    env_file:
+      - path: webapp/backend/.env
+        required: false
     environment:
       - DJANGO_DEBUG=False
       - DJANGO_ALLOWED_HOSTS=*
