@@ -8,53 +8,62 @@ from .common import load_label_encoder
 logger = logging.getLogger(__name__)
 
 MODEL_SPECS = [
+    # -------------------------------------------------------------------------
+    # DEPLOY BRANCH (deploy-baseline): only the baseline model of each family
+    # is served, to keep the Cloud Run instance small (memory, cold start and
+    # image size). The variants are commented out, not deleted - their weights
+    # still exist (models/weights/*_variants, and on the Hugging Face weights
+    # repo) and the full 12-model setup lives on `main`. To re-enable a
+    # variant, uncomment its entry here and add its folder to the weight
+    # download in webapp/Dockerfile.backend.
+    # -------------------------------------------------------------------------
     {"key": "svm", "family": "svm", "label": "SVM (base)",
      "module": "classifier.services.svm_service", "class_name": "SVMService", "model_dir": "svm"},
-    {"key": "svm_tuned", "family": "svm", "label": "SVM (tuned)",
-     "module": "classifier.services.svm_service", "class_name": "SVMService",
-     "model_dir": "svm_variants/tuned"},
+    # {"key": "svm_tuned", "family": "svm", "label": "SVM (tuned)",
+    #  "module": "classifier.services.svm_service", "class_name": "SVMService",
+    #  "model_dir": "svm_variants/tuned"},
 
     {"key": "lstm", "family": "lstm", "label": "LSTM (base)",
      "module": "classifier.services.lstm_service", "class_name": "LSTMService", "model_dir": "lstm"},
-    {"key": "lstm_units256", "family": "lstm", "label": "LSTM (units256)",
-     "module": "classifier.services.lstm_service", "class_name": "LSTMService",
-     "model_dir": "lstm_variants/units256"},
-    {"key": "lstm_dropout05", "family": "lstm", "label": "LSTM (dropout05)",
-     "module": "classifier.services.lstm_service", "class_name": "LSTMService",
-     "model_dir": "lstm_variants/dropout05"},
-    {"key": "lstm_lr5e-4", "family": "lstm", "label": "LSTM (lr5e-4)",
-     "module": "classifier.services.lstm_service", "class_name": "LSTMService",
-     "model_dir": "lstm_variants/lr5e-4"},
-    {"key": "lstm_embed256", "family": "lstm", "label": "LSTM (embed256)",
-     "module": "classifier.services.lstm_service", "class_name": "LSTMService",
-     "model_dir": "lstm_variants/embed256"},
+    # {"key": "lstm_units256", "family": "lstm", "label": "LSTM (units256)",
+    #  "module": "classifier.services.lstm_service", "class_name": "LSTMService",
+    #  "model_dir": "lstm_variants/units256"},
+    # {"key": "lstm_dropout05", "family": "lstm", "label": "LSTM (dropout05)",
+    #  "module": "classifier.services.lstm_service", "class_name": "LSTMService",
+    #  "model_dir": "lstm_variants/dropout05"},
+    # {"key": "lstm_lr5e-4", "family": "lstm", "label": "LSTM (lr5e-4)",
+    #  "module": "classifier.services.lstm_service", "class_name": "LSTMService",
+    #  "model_dir": "lstm_variants/lr5e-4"},
+    # {"key": "lstm_embed256", "family": "lstm", "label": "LSTM (embed256)",
+    #  "module": "classifier.services.lstm_service", "class_name": "LSTMService",
+    #  "model_dir": "lstm_variants/embed256"},
 
     {"key": "bert", "family": "bert", "label": "BERT (base)",
      "module": "classifier.services.bert_service", "class_name": "BERTService", "model_dir": "bert"},
-    {"key": "bert_sweep_b_lr3e-5", "family": "bert", "label": "BERT (sweep_b_lr3e-5)",
-     "module": "classifier.services.bert_service", "class_name": "BERTService",
-     "model_dir": "bert_variants/sweep_b_lr3e-5"},
-    {"key": "bert_distilbert", "family": "bert", "label": "BERT (distilbert)",
-     "module": "classifier.services.bert_service", "class_name": "BERTService",
-     "model_dir": "bert_variants/distilbert"},
+    # {"key": "bert_sweep_b_lr3e-5", "family": "bert", "label": "BERT (sweep_b_lr3e-5)",
+    #  "module": "classifier.services.bert_service", "class_name": "BERTService",
+    #  "model_dir": "bert_variants/sweep_b_lr3e-5"},
+    # {"key": "bert_distilbert", "family": "bert", "label": "BERT (distilbert)",
+    #  "module": "classifier.services.bert_service", "class_name": "BERTService",
+    #  "model_dir": "bert_variants/distilbert"},
 
     {"key": "zeroshot", "family": "zeroshot", "label": "Zero-Shot (baseline)",
      "module": "classifier.services.zeroshot_service", "class_name": "ZeroShotService", "model_dir": None},
-    {"key": "zeroshot_tuned", "family": "zeroshot", "label": "Zero-Shot (tuned)",
-     "module": "classifier.services.zeroshot_service", "class_name": "ZeroShotService", "model_dir": None,
-     "init_kwargs": {
-         "descriptive_label_map": {
-             "Business": "business and finance",
-             "Entertainment": "entertainment, celebrities, and movies",
-             "Health": "health, wellness, and medicine",
-             "Politics": "politics and government",
-             "Science": "science and research",
-             "Sports": "sports",
-             "Technology": "technology",
-             "World": "world news and international affairs",
-         },
-         "hypothesis_template": "This news article is about {}.",
-     }},
+    # {"key": "zeroshot_tuned", "family": "zeroshot", "label": "Zero-Shot (tuned)",
+    #  "module": "classifier.services.zeroshot_service", "class_name": "ZeroShotService", "model_dir": None,
+    #  "init_kwargs": {
+    #      "descriptive_label_map": {
+    #          "Business": "business and finance",
+    #          "Entertainment": "entertainment, celebrities, and movies",
+    #          "Health": "health, wellness, and medicine",
+    #          "Politics": "politics and government",
+    #          "Science": "science and research",
+    #          "Sports": "sports",
+    #          "Technology": "technology",
+    #          "World": "world news and international affairs",
+    #      },
+    #      "hypothesis_template": "This news article is about {}.",
+    #  }},
 ]
 
 

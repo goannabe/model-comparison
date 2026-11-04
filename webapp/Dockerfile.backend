@@ -16,12 +16,8 @@ ENV CUDA_VISIBLE_DEVICES=-1 \
 # Hugging Face model repo at build time into the layout settings.py expects.
 ARG WEIGHTS_REPO=goannabe/model-comparison-weights
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
-    && rm -rf /var/lib/apt/lists/*
-
-# Hugging Face Spaces runs the container as uid 1000; run as that user
-# everywhere so file permissions are identical locally and when deployed.
+# Run as an unprivileged user (uid 1000) rather than root, so file permissions
+# are identical locally and on any host (Cloud Run, HF Spaces, a VM).
 RUN useradd -m -u 1000 user && mkdir -p /app && chown user:user /app
 USER user
 ENV PATH=/home/user/.local/bin:$PATH
@@ -35,7 +31,14 @@ RUN pip install --no-cache-dir --user torch==2.13.0 --index-url https://download
 
 # Fine-tuned weights + label encoder, then the zero-shot base model, so nothing
 # is downloaded when the server starts.
+# DEPLOY BRANCH (deploy-baseline): only the baseline weights are downloaded, to
+# match the models enabled in classifier/services/registry.py. To re-enable a
+# variant, add e.g. --include "weights/bert_variants/distilbert/*" here.
 RUN hf download "$WEIGHTS_REPO" --local-dir ./models \
+        --include "data/artifacts/*" \
+        --include "weights/svm/*" \
+        --include "weights/lstm/*" \
+        --include "weights/bert/*" \
     && python -c "from transformers import AutoTokenizer, AutoModelForSequenceClassification as M; AutoTokenizer.from_pretrained('facebook/bart-large-mnli'); M.from_pretrained('facebook/bart-large-mnli')"
 
 COPY --chown=user webapp/backend ./webapp/backend
@@ -48,7 +51,9 @@ RUN DJANGO_SKIP_MODEL_LOAD=1 python manage.py migrate --noinput
 
 EXPOSE 8000
 
-# One worker: each worker loads all 12 models into its own memory, so a second
+# One worker: each worker loads every model into its own memory, so a second
 # worker would double RAM use. Threads give concurrency instead. The long
 # timeout covers model loading at startup on slow CPUs.
-CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "1", "--threads", "4", "--timeout", "600"]
+# PORT is set by Cloud Run (default 8080); falls back to 8000 elsewhere
+# (docker compose, local runs).
+CMD exec gunicorn config.wsgi:application --bind "0.0.0.0:${PORT:-8000}" --workers 1 --threads 4 --timeout 600
