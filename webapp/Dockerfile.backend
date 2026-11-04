@@ -9,7 +9,8 @@ ENV CUDA_VISIBLE_DEVICES=-1 \
     TF_ENABLE_ONEDNN_OPTS=0 \
     TF_CPP_MIN_LOG_LEVEL=2 \
     PYTHONUNBUFFERED=1 \
-    HF_HOME=/app/hf_cache
+    HF_HOME=/app/hf_cache \
+    DJANGO_DEBUG=False
 
 # Model weights are not in git (too large for GitHub); they're pulled from this
 # Hugging Face model repo at build time into the layout settings.py expects.
