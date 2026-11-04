@@ -1,6 +1,8 @@
 # Large / private - not for the public repo
 data/
-models/
+# models/: keep the training notebooks, exclude weights + data (weights live on Hugging Face)
+models/*
+!models/training/
 submission/
 report_writing_plan.md
 report-writing
