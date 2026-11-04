@@ -1,0 +1,28 @@
+# Large / private - not for the public repo
+data/
+models/
+submission/
+report_writing_plan.md
+report-writing
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+venv-*/
+.ipynb_checkpoints/
+webapp/backend/db.sqlite3
+
+# Node
+node_modules/
+dist/
+
+# Env / secrets
+.env
+.env.local
+.env.*.local
+
+# OS / editor
+.DS_Store
+.vercel

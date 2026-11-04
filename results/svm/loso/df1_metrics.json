@@ -1,0 +1,179 @@
+{
+  "model_family": "svm",
+  "model_name": "linear-svm-tfidf-loso",
+  "run_timestamp": "2026-08-20T11:58:03.701939+00:00",
+  "label_order": [
+    "Business",
+    "Entertainment",
+    "Health",
+    "Politics",
+    "Science",
+    "Sports",
+    "Technology",
+    "World"
+  ],
+  "loso_held_out_source": "df1",
+  "loso_classes_present": [
+    "Business",
+    "Entertainment",
+    "Health",
+    "Politics",
+    "Science",
+    "Sports",
+    "Technology",
+    "World"
+  ],
+  "config": {
+    "max_features": 50000,
+    "ngram_range": [
+      1,
+      2
+    ],
+    "min_df": 2,
+    "sublinear_tf": true,
+    "C": 1.0
+  },
+  "train": {
+    "n_train": 254600,
+    "n_val": null,
+    "train_time_sec": 33.51042294502258
+  },
+  "test": {
+    "n_test": 21654,
+    "n_classes_present": 8,
+    "macro_f1": 0.6677743423870887,
+    "inf_time_sec": 0.07552528381347656,
+    "per_class": {
+      "Business": {
+        "precision": 0.693732970027248,
+        "recall": 0.6747945931619401,
+        "f1-score": 0.6841327421738547,
+        "support": 3773.0
+      },
+      "Entertainment": {
+        "precision": 0.8503282275711159,
+        "recall": 0.6926916221033869,
+        "f1-score": 0.7634577603143419,
+        "support": 2805.0
+      },
+      "Health": {
+        "precision": 0.7241999280834233,
+        "recall": 0.7882583170254404,
+        "f1-score": 0.7548725637181409,
+        "support": 2555.0
+      },
+      "Politics": {
+        "precision": 0.6935830518882408,
+        "recall": 0.5550368550368551,
+        "f1-score": 0.6166234475228607,
+        "support": 4070.0
+      },
+      "Science": {
+        "precision": 0.8553299492385786,
+        "recall": 0.6767068273092369,
+        "f1-score": 0.7556053811659192,
+        "support": 3486.0
+      },
+      "Sports": {
+        "precision": 0.9455095862764884,
+        "recall": 0.8557077625570776,
+        "f1-score": 0.8983700862895494,
+        "support": 2190.0
+      },
+      "Technology": {
+        "precision": 0.6424625098658248,
+        "recall": 0.6981132075471698,
+        "f1-score": 0.6691327579120427,
+        "support": 2332.0
+      },
+      "World": {
+        "precision": 0.11855886049434436,
+        "recall": 0.6388261851015802,
+        "f1-score": 0.2,
+        "support": 443.0
+      }
+    },
+    "confusion_matrix": [
+      [
+        2546,
+        62,
+        112,
+        479,
+        83,
+        22,
+        245,
+        224
+      ],
+      [
+        183,
+        1943,
+        104,
+        46,
+        105,
+        48,
+        152,
+        224
+      ],
+      [
+        76,
+        90,
+        2014,
+        186,
+        60,
+        3,
+        50,
+        76
+      ],
+      [
+        350,
+        39,
+        42,
+        2259,
+        41,
+        25,
+        76,
+        1238
+      ],
+      [
+        118,
+        15,
+        319,
+        74,
+        2359,
+        0,
+        345,
+        256
+      ],
+      [
+        16,
+        76,
+        100,
+        14,
+        24,
+        1874,
+        38,
+        48
+      ],
+      [
+        351,
+        57,
+        87,
+        80,
+        81,
+        10,
+        1628,
+        38
+      ],
+      [
+        30,
+        3,
+        3,
+        119,
+        5,
+        0,
+        0,
+        283
+      ]
+    ]
+  }
+}

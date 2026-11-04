@@ -1,0 +1,180 @@
+{
+  "model_family": "svm",
+  "model_name": "linear-svm-tfidf-noise10",
+  "run_timestamp": "2026-08-20T12:00:10.193600+00:00",
+  "label_order": [
+    "Business",
+    "Entertainment",
+    "Health",
+    "Politics",
+    "Science",
+    "Sports",
+    "Technology",
+    "World"
+  ],
+  "noise_rate": 0.1,
+  "config": {
+    "max_features": 50000,
+    "ngram_range": [
+      1,
+      2
+    ],
+    "min_df": 2,
+    "sublinear_tf": true,
+    "C": 1.0
+  },
+  "train": {
+    "n_train": 50000,
+    "n_flipped": 5000,
+    "train_time_sec": 8.944923400878906
+  },
+  "test": {
+    "n_test": 48178,
+    "eval_split": "val (original, unmodified)",
+    "accuracy": 0.7861679604798871,
+    "macro_precision": 0.7704619770680511,
+    "macro_recall": 0.7471644476188111,
+    "macro_f1": 0.7569377287528773,
+    "weighted_f1": 0.7845794950095515,
+    "per_class": {
+      "Business": {
+        "precision": 0.7918374316939891,
+        "recall": 0.7333544203700775,
+        "f1": 0.7614746695130963,
+        "support": 6323
+      },
+      "Entertainment": {
+        "precision": 0.7830359842757787,
+        "recall": 0.8585875331564987,
+        "f1": 0.8190732247350941,
+        "support": 12064
+      },
+      "Health": {
+        "precision": 0.697931697931698,
+        "recall": 0.6916110581506196,
+        "f1": 0.694757002633469,
+        "support": 4196
+      },
+      "Politics": {
+        "precision": 0.7615721942504466,
+        "recall": 0.7516832318050657,
+        "f1": 0.7565954013715208,
+        "support": 6238
+      },
+      "Science": {
+        "precision": 0.6550290939318371,
+        "recall": 0.4897451833436917,
+        "f1": 0.5604551920341394,
+        "support": 1609
+      },
+      "Sports": {
+        "precision": 0.8867828735826705,
+        "recall": 0.8951144516569867,
+        "f1": 0.8909291847317861,
+        "support": 5854
+      },
+      "Technology": {
+        "precision": 0.7881118881118881,
+        "recall": 0.7735072065888813,
+        "f1": 0.7807412538967786,
+        "support": 5828
+      },
+      "World": {
+        "precision": 0.7993946527661006,
+        "recall": 0.783712495878668,
+        "f1": 0.791475901107134,
+        "support": 6066
+      }
+    },
+    "confusion_matrix": [
+      [
+        4637,
+        393,
+        209,
+        235,
+        40,
+        94,
+        499,
+        216
+      ],
+      [
+        149,
+        10358,
+        544,
+        426,
+        75,
+        192,
+        159,
+        161
+      ],
+      [
+        111,
+        764,
+        2902,
+        153,
+        57,
+        57,
+        92,
+        60
+      ],
+      [
+        221,
+        519,
+        138,
+        4689,
+        68,
+        72,
+        131,
+        400
+      ],
+      [
+        68,
+        263,
+        126,
+        105,
+        788,
+        36,
+        156,
+        67
+      ],
+      [
+        57,
+        272,
+        57,
+        75,
+        17,
+        5240,
+        35,
+        101
+      ],
+      [
+        381,
+        359,
+        106,
+        108,
+        119,
+        59,
+        4508,
+        188
+      ],
+      [
+        232,
+        300,
+        76,
+        366,
+        39,
+        159,
+        140,
+        4754
+      ]
+    ],
+    "inference_time_sec_total": 0.029390573501586914,
+    "inference_time_ms_per_sample": 0.0006100413778402365
+  },
+  "environment": {
+    "framework": "scikit-learn",
+    "framework_version": "1.9.0",
+    "device": "CPU",
+    "seed": 42
+  }
+}

@@ -1,0 +1,53 @@
+FROM python:3.12-slim
+
+# This container has no GPU. Without these, TensorFlow still probes for CUDA
+# (harmless but noisy) and its oneDNN custom-ops path crashes with SIGSEGV on
+# CPUs lacking AVX-512 - same failure mode hit when training the LSTM in
+# Docker (see ContentLearning/TRAINING_LOG.md). CUDA_VISIBLE_DEVICES=-1 skips
+# the GPU probe entirely; TF_ENABLE_ONEDNN_OPTS=0 avoids the crashing path.
+ENV CUDA_VISIBLE_DEVICES=-1 \
+    TF_ENABLE_ONEDNN_OPTS=0 \
+    TF_CPP_MIN_LOG_LEVEL=2 \
+    PYTHONUNBUFFERED=1 \
+    HF_HOME=/app/hf_cache
+
+# Model weights are not in git (too large for GitHub); they're pulled from this
+# Hugging Face model repo at build time into the layout settings.py expects.
+ARG WEIGHTS_REPO=goannabe/model-comparison-weights
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# Hugging Face Spaces runs the container as uid 1000; run as that user
+# everywhere so file permissions are identical locally and when deployed.
+RUN useradd -m -u 1000 user && mkdir -p /app && chown user:user /app
+USER user
+ENV PATH=/home/user/.local/bin:$PATH
+WORKDIR /app
+
+# CPU-only torch first: the default Linux wheel pulls ~3GB of CUDA libraries
+# this container can never use. requirements.txt's torch pin is then satisfied.
+COPY --chown=user webapp/backend/requirements.txt ./webapp/backend/requirements.txt
+RUN pip install --no-cache-dir --user torch==2.13.0 --index-url https://download.pytorch.org/whl/cpu \
+    && pip install --no-cache-dir --user -r webapp/backend/requirements.txt
+
+# Fine-tuned weights + label encoder, then the zero-shot base model, so nothing
+# is downloaded when the server starts.
+RUN hf download "$WEIGHTS_REPO" --local-dir ./models \
+    && python -c "from transformers import AutoTokenizer, AutoModelForSequenceClassification as M; AutoTokenizer.from_pretrained('facebook/bart-large-mnli'); M.from_pretrained('facebook/bart-large-mnli')"
+
+COPY --chown=user webapp/backend ./webapp/backend
+
+WORKDIR /app/webapp/backend
+
+# DJANGO_SKIP_MODEL_LOAD: migrate doesn't touch the classifier models at all, and
+# loading TF/Torch here at build time isn't needed - just makes the build fragile.
+RUN DJANGO_SKIP_MODEL_LOAD=1 python manage.py migrate --noinput
+
+EXPOSE 8000
+
+# One worker: each worker loads all 12 models into its own memory, so a second
+# worker would double RAM use. Threads give concurrency instead. The long
+# timeout covers model loading at startup on slow CPUs.
+CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "1", "--threads", "4", "--timeout", "600"]

@@ -1,0 +1,95 @@
+{
+  "model_family": "svm",
+  "model_name": "linear-svm-tfidf-loso",
+  "run_timestamp": "2026-08-20T11:59:37.981667+00:00",
+  "label_order": [
+    "Business",
+    "Entertainment",
+    "Health",
+    "Politics",
+    "Science",
+    "Sports",
+    "Technology",
+    "World"
+  ],
+  "loso_held_out_source": "df5",
+  "loso_classes_present": [
+    "Business",
+    "Sports",
+    "Technology",
+    "World"
+  ],
+  "config": {
+    "max_features": 50000,
+    "ngram_range": [
+      1,
+      2
+    ],
+    "min_df": 2,
+    "sublinear_tf": true,
+    "C": 1.0
+  },
+  "train": {
+    "n_train": 171082,
+    "n_val": null,
+    "train_time_sec": 31.718311309814453
+  },
+  "test": {
+    "n_test": 119911,
+    "n_classes_present": 4,
+    "macro_f1": 0.6896975918868153,
+    "inf_time_sec": 0.03830313682556152,
+    "per_class": {
+      "Business": {
+        "precision": 0.7894838119978833,
+        "recall": 0.5473800073379808,
+        "f1-score": 0.6465096123542389,
+        "support": 29981.0
+      },
+      "Sports": {
+        "precision": 0.9530007533271951,
+        "recall": 0.7594130398532599,
+        "f1-score": 0.845264388722879,
+        "support": 29985.0
+      },
+      "Technology": {
+        "precision": 0.8361574556830031,
+        "recall": 0.42825194432390934,
+        "f1-score": 0.5664084056243516,
+        "support": 29959.0
+      },
+      "World": {
+        "precision": 0.8209229390681003,
+        "recall": 0.6110518241846195,
+        "f1-score": 0.700607960845792,
+        "support": 29986.0
+      }
+    },
+    "confusion_matrix": [
+      [
+        16411,
+        226,
+        2361,
+        1723
+      ],
+      [
+        386,
+        22771,
+        59,
+        1167
+      ],
+      [
+        2942,
+        218,
+        12830,
+        1107
+      ],
+      [
+        1048,
+        679,
+        94,
+        18323
+      ]
+    ]
+  }
+}

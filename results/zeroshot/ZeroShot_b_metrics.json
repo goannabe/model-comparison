@@ -1,0 +1,199 @@
+{
+  "model_family": "zeroshot",
+  "model_name": "facebook/bart-large-mnli",
+  "variant": "tuned",
+  "run_timestamp": "2026-08-10T18:06:02.536523+00:00",
+  "label_order": [
+    "Business",
+    "Entertainment",
+    "Health",
+    "Politics",
+    "Science",
+    "Sports",
+    "Technology",
+    "World"
+  ],
+  "config": {
+    "model_checkpoint": "facebook/bart-large-mnli",
+    "hypothesis_template": "This news article is about {}.",
+    "candidate_labels": [
+      "business and finance",
+      "entertainment, celebrities, and movies",
+      "health, wellness, and medicine",
+      "politics and government",
+      "science and research",
+      "sports",
+      "technology",
+      "world news and international affairs"
+    ],
+    "descriptive_label_map": {
+      "Business": "business and finance",
+      "Entertainment": "entertainment, celebrities, and movies",
+      "Health": "health, wellness, and medicine",
+      "Politics": "politics and government",
+      "Science": "science and research",
+      "Sports": "sports",
+      "Technology": "technology",
+      "World": "world news and international affairs"
+    },
+    "multi_label": false,
+    "batch_size": 32,
+    "full_test_size": 48178,
+    "sampling_strategy": "stratified_subsample"
+  },
+  "train": {
+    "n_train": 0,
+    "n_val": 0,
+    "train_time_sec": 0.0,
+    "epochs_trained": null,
+    "history": {}
+  },
+  "test": {
+    "n_test": 2500,
+    "accuracy": 0.5804,
+    "macro_precision": 0.5835795265906317,
+    "macro_recall": 0.598900056736211,
+    "macro_f1": 0.5571269195732923,
+    "weighted_f1": 0.5684968546336793,
+    "per_class": {
+      "Business": {
+        "precision": 0.7026022304832714,
+        "recall": 0.5762195121951219,
+        "f1": 0.6331658291457286,
+        "support": 328
+      },
+      "Entertainment": {
+        "precision": 0.9619565217391305,
+        "recall": 0.2827476038338658,
+        "f1": 0.43703703703703706,
+        "support": 626
+      },
+      "Health": {
+        "precision": 0.5085470085470085,
+        "recall": 0.5458715596330275,
+        "f1": 0.5265486725663717,
+        "support": 218
+      },
+      "Politics": {
+        "precision": 0.581151832460733,
+        "recall": 0.6851851851851852,
+        "f1": 0.6288951841359773,
+        "support": 324
+      },
+      "Science": {
+        "precision": 0.22302158273381295,
+        "recall": 0.37349397590361444,
+        "f1": 0.27927927927927926,
+        "support": 83
+      },
+      "Sports": {
+        "precision": 0.7513227513227513,
+        "recall": 0.9342105263157895,
+        "f1": 0.8328445747800587,
+        "support": 304
+      },
+      "Technology": {
+        "precision": 0.46292585170340683,
+        "recall": 0.7649006622516556,
+        "f1": 0.5767790262172284,
+        "support": 302
+      },
+      "World": {
+        "precision": 0.4771084337349398,
+        "recall": 0.6285714285714286,
+        "f1": 0.5424657534246575,
+        "support": 315
+      }
+    },
+    "confusion_matrix": [
+      [
+        189,
+        1,
+        8,
+        18,
+        1,
+        14,
+        44,
+        53
+      ],
+      [
+        33,
+        177,
+        79,
+        41,
+        24,
+        28,
+        170,
+        74
+      ],
+      [
+        8,
+        2,
+        119,
+        9,
+        39,
+        16,
+        17,
+        8
+      ],
+      [
+        9,
+        2,
+        15,
+        222,
+        2,
+        16,
+        10,
+        48
+      ],
+      [
+        6,
+        0,
+        2,
+        4,
+        31,
+        8,
+        17,
+        15
+      ],
+      [
+        6,
+        0,
+        1,
+        4,
+        0,
+        284,
+        2,
+        7
+      ],
+      [
+        11,
+        0,
+        5,
+        5,
+        36,
+        2,
+        231,
+        12
+      ],
+      [
+        7,
+        2,
+        5,
+        79,
+        6,
+        10,
+        8,
+        198
+      ]
+    ],
+    "inference_time_sec_total": 820.4672501087189,
+    "inference_time_ms_per_sample": 328.1869000434875
+  },
+  "environment": {
+    "framework": "pytorch+transformers",
+    "framework_version": "2.12.1+cu126",
+    "device": "GPU",
+    "seed": 42
+  }
+}

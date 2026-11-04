@@ -1,0 +1,133 @@
+{
+  "model_family": "lstm",
+  "model_name": "bilstm-scratch-embed-loso",
+  "run_timestamp": "2026-08-20T16:07:33.252228+00:00",
+  "label_order": [
+    "Business",
+    "Entertainment",
+    "Health",
+    "Politics",
+    "Science",
+    "Sports",
+    "Technology",
+    "World"
+  ],
+  "loso_held_out_source": "df5",
+  "loso_classes_present": [
+    "Business",
+    "Sports",
+    "Technology",
+    "World"
+  ],
+  "config": {
+    "max_len": 200,
+    "vocab_size": 20000,
+    "embedding_dim": 128,
+    "lstm_units": 128,
+    "batch_size": 64,
+    "epochs_planned": 15,
+    "learning_rate": 0.001,
+    "epochs_trained": 5
+  },
+  "train": {
+    "n_train": 171082,
+    "n_val": 30191,
+    "train_time_sec": 10074.191531896591,
+    "epochs_trained": 5,
+    "history": {
+      "accuracy": [
+        0.7383477091789246,
+        0.830590009689331,
+        0.8561391830444336,
+        0.8790170550346375,
+        0.898165762424469
+      ],
+      "loss": [
+        0.8163476586341858,
+        0.5416967272758484,
+        0.4510500133037567,
+        0.3736990690231323,
+        0.30829277634620667
+      ],
+      "val_accuracy": [
+        0.8088172078132629,
+        0.8223311305046082,
+        0.8233248591423035,
+        0.8176608681678772,
+        0.8159385323524475
+      ],
+      "val_loss": [
+        0.5855618119239807,
+        0.5553046464920044,
+        0.5704203248023987,
+        0.6323087215423584,
+        0.7027046084403992
+      ]
+    }
+  },
+  "test": {
+    "n_test": 119911,
+    "n_classes_present": 4,
+    "macro_f1": 0.7444014249590266,
+    "per_class": {
+      "Business": {
+        "precision": 0.8372136687945926,
+        "recall": 0.5949101097361662,
+        "f1-score": 0.6955640050697085,
+        "support": 29981.0
+      },
+      "Sports": {
+        "precision": 0.9428216283405843,
+        "recall": 0.8600633650158412,
+        "f1-score": 0.8995430604485681,
+        "support": 29985.0
+      },
+      "Technology": {
+        "precision": 0.7952235030886716,
+        "recall": 0.5457124737140759,
+        "f1-score": 0.6472544439605685,
+        "support": 29959.0
+      },
+      "World": {
+        "precision": 0.8860098753820832,
+        "recall": 0.6283265523911159,
+        "f1-score": 0.7352441903572613,
+        "support": 29986.0
+      }
+    },
+    "confusion_matrix": [
+      [
+        17836,
+        308,
+        3950,
+        1233
+      ],
+      [
+        203,
+        25789,
+        97,
+        702
+      ],
+      [
+        2162,
+        424,
+        16349,
+        489
+      ],
+      [
+        1103,
+        832,
+        163,
+        18841
+      ]
+    ],
+    "inf_time_sec": 82.50579762458801,
+    "inference_time_ms_per_sample": 0.6880586236841325
+  },
+  "environment": {
+    "framework": "tensorflow",
+    "framework_version": "2.21.0",
+    "device": "CPU",
+    "seed": 42
+  }
+}

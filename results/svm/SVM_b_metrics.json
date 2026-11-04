@@ -1,0 +1,307 @@
+{
+  "model_family": "svm",
+  "model_name": "linear-svm-tfidf",
+  "variant": "tuned",
+  "run_timestamp": "2026-08-08T13:53:57.541142+00:00",
+  "label_order": [
+    "Business",
+    "Entertainment",
+    "Health",
+    "Politics",
+    "Science",
+    "Sports",
+    "Technology",
+    "World"
+  ],
+  "config": {
+    "max_features": 50000,
+    "ngram_range": [
+      1,
+      2
+    ],
+    "min_df": 2,
+    "sublinear_tf": true,
+    "C": 0.1,
+    "class_weight": "balanced",
+    "loss": "squared_hinge",
+    "grid_search_time_sec": 509.2409408092499
+  },
+  "train": {
+    "n_train": 224828,
+    "n_val": 48178,
+    "train_time_sec": 40.66117739677429,
+    "epochs_trained": null,
+    "history": {
+      "cv_results": [
+        {
+          "C": 0.01,
+          "class_weight": null,
+          "loss": "hinge",
+          "val_macro_f1": 0.7259323163842549
+        },
+        {
+          "C": 0.01,
+          "class_weight": null,
+          "loss": "squared_hinge",
+          "val_macro_f1": 0.7627534602251592
+        },
+        {
+          "C": 0.01,
+          "class_weight": "balanced",
+          "loss": "hinge",
+          "val_macro_f1": 0.7586673939136542
+        },
+        {
+          "C": 0.01,
+          "class_weight": "balanced",
+          "loss": "squared_hinge",
+          "val_macro_f1": 0.7887736915785184
+        },
+        {
+          "C": 0.1,
+          "class_weight": null,
+          "loss": "hinge",
+          "val_macro_f1": 0.7934654044917728
+        },
+        {
+          "C": 0.1,
+          "class_weight": null,
+          "loss": "squared_hinge",
+          "val_macro_f1": 0.8141495687776447
+        },
+        {
+          "C": 0.1,
+          "class_weight": "balanced",
+          "loss": "hinge",
+          "val_macro_f1": 0.8043796603988929
+        },
+        {
+          "C": 0.1,
+          "class_weight": "balanced",
+          "loss": "squared_hinge",
+          "val_macro_f1": 0.821042759369248
+        },
+        {
+          "C": 1.0,
+          "class_weight": null,
+          "loss": "hinge",
+          "val_macro_f1": 0.820865597630913
+        },
+        {
+          "C": 1.0,
+          "class_weight": null,
+          "loss": "squared_hinge",
+          "val_macro_f1": 0.8177366183325425
+        },
+        {
+          "C": 1.0,
+          "class_weight": "balanced",
+          "loss": "hinge",
+          "val_macro_f1": 0.8208259335267976
+        },
+        {
+          "C": 1.0,
+          "class_weight": "balanced",
+          "loss": "squared_hinge",
+          "val_macro_f1": 0.8146803098990769
+        },
+        {
+          "C": 10.0,
+          "class_weight": null,
+          "loss": "hinge",
+          "val_macro_f1": 0.7894339366338456
+        },
+        {
+          "C": 10.0,
+          "class_weight": null,
+          "loss": "squared_hinge",
+          "val_macro_f1": 0.7791018669779403
+        },
+        {
+          "C": 10.0,
+          "class_weight": "balanced",
+          "loss": "hinge",
+          "val_macro_f1": 0.7870919847709328
+        },
+        {
+          "C": 10.0,
+          "class_weight": "balanced",
+          "loss": "squared_hinge",
+          "val_macro_f1": 0.7779026616650335
+        },
+        {
+          "C": 100.0,
+          "class_weight": null,
+          "loss": "hinge",
+          "val_macro_f1": 0.7464567247801281
+        },
+        {
+          "C": 100.0,
+          "class_weight": null,
+          "loss": "squared_hinge",
+          "val_macro_f1": 0.7514611998987074
+        },
+        {
+          "C": 100.0,
+          "class_weight": "balanced",
+          "loss": "hinge",
+          "val_macro_f1": 0.7472075333784425
+        },
+        {
+          "C": 100.0,
+          "class_weight": "balanced",
+          "loss": "squared_hinge",
+          "val_macro_f1": 0.7529668538206604
+        }
+      ]
+    }
+  },
+  "test": {
+    "n_test": 48178,
+    "accuracy": 0.8385985304495828,
+    "macro_precision": 0.8120672400691387,
+    "macro_recall": 0.8244692642215956,
+    "macro_f1": 0.8169662735068003,
+    "weighted_f1": 0.8394713551656172,
+    "per_class": {
+      "Business": {
+        "precision": 0.8472881355932204,
+        "recall": 0.790605725130476,
+        "f1": 0.8179661294281273,
+        "support": 6323
+      },
+      "Entertainment": {
+        "precision": 0.8684298348072752,
+        "recall": 0.8628149867374005,
+        "f1": 0.8656133056133056,
+        "support": 12064
+      },
+      "Health": {
+        "precision": 0.7257623554153523,
+        "recall": 0.8222539909459138,
+        "f1": 0.7710008936550492,
+        "support": 4197
+      },
+      "Politics": {
+        "precision": 0.8130262112787927,
+        "recall": 0.8204552741263226,
+        "f1": 0.8167238490385382,
+        "support": 6238
+      },
+      "Science": {
+        "precision": 0.5979274611398964,
+        "recall": 0.7172156619018024,
+        "f1": 0.652161627578412,
+        "support": 1609
+      },
+      "Sports": {
+        "precision": 0.9209864116758933,
+        "recall": 0.937820293816194,
+        "f1": 0.9293271265340669,
+        "support": 5854
+      },
+      "Technology": {
+        "precision": 0.8552418629742852,
+        "recall": 0.81620044619873,
+        "f1": 0.835265191429575,
+        "support": 5827
+      },
+      "World": {
+        "precision": 0.8678756476683938,
+        "recall": 0.8283877349159249,
+        "f1": 0.8476720647773279,
+        "support": 6066
+      }
+    },
+    "confusion_matrix": [
+      [
+        4999,
+        251,
+        210,
+        184,
+        68,
+        57,
+        403,
+        151
+      ],
+      [
+        123,
+        10409,
+        607,
+        401,
+        172,
+        141,
+        125,
+        86
+      ],
+      [
+        47,
+        431,
+        3451,
+        83,
+        94,
+        27,
+        39,
+        25
+      ],
+      [
+        150,
+        243,
+        184,
+        5118,
+        129,
+        40,
+        55,
+        319
+      ],
+      [
+        38,
+        135,
+        109,
+        64,
+        1154,
+        11,
+        75,
+        23
+      ],
+      [
+        24,
+        152,
+        41,
+        64,
+        18,
+        5490,
+        21,
+        44
+      ],
+      [
+        332,
+        189,
+        94,
+        85,
+        210,
+        44,
+        4756,
+        117
+      ],
+      [
+        187,
+        176,
+        59,
+        296,
+        85,
+        151,
+        87,
+        5025
+      ]
+    ],
+    "inference_time_sec_total": 0.07211518287658691,
+    "inference_time_ms_per_sample": 0.0014968488288552226
+  },
+  "environment": {
+    "framework": "scikit-learn",
+    "framework_version": "1.9.0",
+    "device": "CPU",
+    "seed": 42
+  }
+}
